@@ -1,0 +1,87 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.daniel.manoge3.InputItemActivity">
+
+    <TextView
+        android:id="@+id/inputRoutineTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Create A New Routine"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/routineLiteral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/routineNameField"
+        android:layout_alignBottom="@+id/routineNameField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:text="Name:"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputRoutineTitle" />
+
+    <EditText
+        android:id="@+id/routineNameField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputRoutineTitle"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/routineLiteral"
+        android:layout_toRightOf="@+id/routineLiteral"
+        android:autoSizeTextType="uniform"
+        android:completionThreshold="1"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/routineLiteral"
+        app:layout_constraintTop_toBottomOf="@+id/inputRoutineTitle" />
+
+    <ListView
+        android:id="@+id/inRoutineList"
+        android:layout_width="170dp"
+        android:layout_height="0dp"
+        android:layout_above="@+id/newRoutineFab"
+        android:layout_below="@+id/routineNameField"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@+id/newRoutineFab"
+        android:layout_toStartOf="@+id/newRoutineFab"
+        android:background="@color/cardview_shadow_start_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/routineNameField" />
+
+    <ListView
+        android:id="@+id/exerciseList"
+        android:layout_width="170dp"
+        android:layout_height="0dp"
+        android:layout_above="@+id/newRoutineFab"
+        android:layout_below="@+id/routineNameField"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toEndOf="@+id/newRoutineFab"
+        android:layout_toRightOf="@+id/newRoutineFab"
+        android:background="@color/cardview_shadow_end_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/routineNameField"/>
+</android.support.constraint.ConstraintLayout>

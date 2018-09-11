@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="inputSetTitle" type="id">inputSetTitle</item>
+    <item name="inputSetAddButton" type="id">inputSetAddButton</item>
+    <item name="inputSetRemoveButton" type="id">inputSetRemoveButton</item>
+    <item name="inputSetVerticalLayout" type="id">inputSetVerticalLayout</item>
+
+    <item name="set1Weight" type="id">set1Weight</item>
+    <item name="set1Rep" type="id">set1Rep</item>
+
+    <item name="set2Weight" type="id">set2Weight</item>
+    <item name="set2Rep" type="id">set2Rep</item>
+
+    <item name="set3Weight" type="id">set3Weight</item>
+    <item name="set3Rep" type="id">set3Rep</item>
+</resources>

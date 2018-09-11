@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.daniel.manoge3.MainActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/startWorkoutFab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="visible"
+        app:layout_anchor="@+id/mainCalendar"
+        app:layout_anchorGravity="bottom|center" />
+
+    <CalendarView
+        android:id="@+id/mainCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="48dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/weightGraphFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@mipmap/ic_chart_line_white_48dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/databaseFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@mipmap/ic_database_white_48dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/inputActivityFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="16dp"/>
+
+</android.support.design.widget.CoordinatorLayout>
