@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper mInstance = null;
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
 
     public static DatabaseHelper getInstance(Context context) {
