@@ -9,11 +9,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import helper.DatabaseHelper;
 import model.Weight;
@@ -22,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private CalendarView mCalendarView;
+    private CompactCalendarView mCalendarView;
 
     DatabaseHelper db;
 
@@ -31,10 +35,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mCalendarView = findViewById(R.id.mainCalendar);
+        mCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
+        mCalendarView.displayOtherMonthDays(false);
+        mCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
+        mCalendarView.shouldSelectFirstDayOfMonthOnScroll(false);
+        mCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                long integerDate = dateClicked.getTime();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                sdf.setTimeZone(TimeZone.getDefault());
+                String stringDate = sdf.format(dateClicked);
+
+
+                Intent intent = new Intent(MainActivity.this, InputActivity.class);
+                intent.putExtra("stringDate", stringDate);
+                intent.putExtra("integerDate", integerDate);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+
+            }
+        });
+
         //
         // Fab buttons
         //
-        final FloatingActionButton weightGraphFab = (FloatingActionButton) findViewById(R.id.weightGraphFab);
+        final FloatingActionButton weightGraphFab = findViewById(R.id.weightGraphFab);
         weightGraphFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton databaseFab = (FloatingActionButton) findViewById(R.id.databaseFab);
+        FloatingActionButton databaseFab = findViewById(R.id.databaseFab);
         databaseFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton inputActivityFab= (FloatingActionButton) findViewById(R.id.inputActivityFab);
+        FloatingActionButton inputActivityFab= findViewById(R.id.inputActivityFab);
         inputActivityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
         //
         // Calendar
         //
-        mCalendarView = findViewById(R.id.mainCalendar);
-        mCalendarView.setDate(Calendar.getInstance().getTimeInMillis(), false, true);
-        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        //mCalendarView = findViewById(R.id.mainCalendar);
+        //mCalendarView.setDate(Calendar.getInstance().getTimeInMillis(), false, true);
+        /*mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
                 String stringDate = (i1 + 1) + "/" + i2 + "/" + i;
@@ -104,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 // --
                 startActivity(inputIntent);
             }
-        });
+        });*/
 
         //dbh.closeDB();
     }
@@ -179,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
         long[] longDates = new long[dates.length];
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
         db = DatabaseHelper.getInstance(this);
 
