@@ -15,16 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -201,6 +198,9 @@ public class InputItemTab1Set extends Fragment {
                     for (Rep element : sets) {
                         dbh.createRep(element);
                         Log.d(TAG, "SET SAVED: " + element);
+                    }
+                    if (!MainActivity.getInstance().workoutEventExists(longDate)){
+                        MainActivity.getInstance().addWorkoutEvent(longDate);
                     }
                     getActivity().finish();
                     Log.d(TAG, "onClick: workout saved");
