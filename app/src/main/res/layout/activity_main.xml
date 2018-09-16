@@ -1,27 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.daniel.manoge3.MainActivity">
 
+    <TextView
+        android:id="@+id/month_year_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/startWorkoutFab"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginTop="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="visible"
         app:layout_anchor="@+id/mainCalendar"
-        app:layout_anchorGravity="bottom|center" />
+        app:layout_anchorGravity="bottom|center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainCalendar" />
 
-    <CalendarView
+    <com.github.sundeepk.compactcalendarview.CompactCalendarView
         android:id="@+id/mainCalendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48dp"/>
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:compactCalendarBackgroundColor="@android:color/transparent"
+        app:compactCalendarCurrentDayBackgroundColor="@android:color/transparent"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorAccent"
+        app:compactCalendarTargetHeight="250dp"
+        app:compactCalendarTextSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthLeftFab" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/weightGraphFab"
@@ -30,6 +56,8 @@
         android:layout_gravity="bottom|start"
         android:layout_margin="16dp"
         app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@mipmap/ic_chart_line_white_48dp" />
 
     <android.support.design.widget.FloatingActionButton
@@ -39,6 +67,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@mipmap/ic_database_white_48dp" />
 
     <android.support.design.widget.FloatingActionButton
@@ -46,6 +76,76 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/databaseFab"
+        app:layout_constraintStart_toEndOf="@+id/weightGraphFab" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/yearLeftFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@android:color/transparent"
+        app:elevation="0dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@+id/month_year_tv"
+        app:layout_constraintStart_toStartOf="@+id/mainCalendar"
+        app:layout_constraintTop_toTopOf="@+id/month_year_tv"
+        app:pressedTranslationZ="1dp"
+        app:srcCompat="@drawable/ic_fast_rewind"
+        android:layout_marginLeft="8dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/monthLeftFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/transparent"
+        app:elevation="0dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@+id/yearLeftFab"
+        app:layout_constraintStart_toEndOf="@+id/yearLeftFab"
+        app:layout_constraintTop_toTopOf="@+id/yearLeftFab"
+        app:pressedTranslationZ="1dp"
+        app:rippleColor="@android:color/transparent"
+        app:srcCompat="@drawable/ic_back" android:focusable="true"
+        android:layout_marginLeft="8dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/yearRightFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@android:color/transparent"
+        app:elevation="0dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@+id/month_year_tv"
+        app:layout_constraintEnd_toEndOf="@+id/mainCalendar"
+        app:layout_constraintTop_toTopOf="@+id/month_year_tv"
+        app:pressedTranslationZ="1dp"
+        app:srcCompat="@drawable/ic_fast_forward"
+        android:layout_marginRight="8dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/monthRightFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/transparent"
+        app:elevation="0dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@+id/yearRightFab"
+        app:layout_constraintEnd_toStartOf="@+id/yearRightFab"
+        app:layout_constraintTop_toTopOf="@+id/yearRightFab"
+        app:pressedTranslationZ="1dp"
+        app:srcCompat="@drawable/ic_play" android:focusable="true"
+        android:layout_marginRight="8dp" />
+
+</android.support.constraint.ConstraintLayout>

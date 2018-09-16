@@ -2,26 +2,17 @@ package com.example.daniel.manoge3;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import helper.DatabaseHelper;
@@ -50,6 +41,8 @@ public class InputActivity extends AppCompatActivity {
     DatabaseHelper dbh;
 
     private boolean weightExists = false;
+
+    private int workoutCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +74,6 @@ public class InputActivity extends AppCompatActivity {
         inputRepListView = findViewById(R.id.inputRepListView);
         //populateModelList();
 
-
         // enters or update date, weight pair into database
         FloatingActionButton saveInputFab = (FloatingActionButton) findViewById(R.id.saveInputFab);
         saveInputFab.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +87,10 @@ public class InputActivity extends AppCompatActivity {
                     int result = Float.compare(weight, 00.00f);
                     if (result <= 0) {
                         inputWeight.setText("");
-                        toastMessage("Weight entered must be greater than 0.");
+                        dbh.deleteWeight(selectedIntegerDate);
+                        toastMessage("Weight Deleted");
+                        MainActivity.getInstance().deleteWeightEvent(selectedIntegerDate);
+                        finish();
                     } else {
                         Weight newWeight = new Weight();
                         newWeight.setDate(selectedIntegerDate);
@@ -111,6 +106,7 @@ public class InputActivity extends AppCompatActivity {
                             dbh.createWeight(newWeight);
                             toastMessage("Weight Created");
                             Log.d(TAG, "createWeight: " + selectedDate + ", " + weight);
+                            MainActivity.getInstance().addWeightEvent(newWeight.getDate());
                             finish();
                         }
                     }
@@ -136,6 +132,7 @@ public class InputActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         populateModelList();
+        workoutCount = exerciseIDs.size();
     }
 
     @Override
@@ -192,8 +189,7 @@ public class InputActivity extends AppCompatActivity {
         }
 
         if(adapter == null){
-            InputActivityCustomAdapter adapter =
-                    new InputActivityCustomAdapter(this,
+            adapter = new InputActivityCustomAdapter(this,
                             R.layout.activity_input_listview_item,
                             list);
             inputRepListView.setAdapter(adapter);
@@ -223,8 +219,13 @@ public class InputActivity extends AppCompatActivity {
         toastMessage("Deleting Exercise");
         dbh.deleteRepsWithIDOnDate(selectedIntegerDate, exerciseIDs.get(position));
         Log.d(TAG, "deleteFromList: " + selectedIntegerDate + ", " + exerciseIDs.get(position));
+        if (workoutCount == 1){
+            MainActivity.getInstance().deleteWorkoutEvent(selectedIntegerDate);
+        }
+        workoutCount--;
         onResume();
     }
+
 
     private void toastMessage(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

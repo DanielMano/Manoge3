@@ -1,40 +1,94 @@
 package com.example.daniel.manoge3;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.CalendarView;
+import android.widget.TextView;
+
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import helper.DatabaseHelper;
+import model.Rep;
 import model.Weight;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private CalendarView mCalendarView;
+    private CompactCalendarView mCalendarView;
+    private static MainActivity instance;
+
+    private TextView monthYear;
+    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
+
 
     DatabaseHelper db;
+
+    public static MainActivity getInstance(){
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        instance = this;
+
+        db = DatabaseHelper.getInstance(this);
+
+        mCalendarView = findViewById(R.id.mainCalendar);
+        mCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
+        mCalendarView.displayOtherMonthDays(false);
+        mCalendarView.shouldDrawIndicatorsBelowSelectedDays(true);
+        mCalendarView.shouldSelectFirstDayOfMonthOnScroll(false);
+
+        // Get events for weights and workouts from database in parallel in the background
+        new PopulateWeightEvents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new PopulateWorkoutEvents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        monthYear = findViewById(R.id.month_year_tv);
+        monthYear.setText(dateFormatForMonth.format(mCalendarView.getFirstDayOfCurrentMonth()));
+
+        mCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                long integerDate = dateClicked.getTime();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                sdf.setTimeZone(TimeZone.getDefault());
+                String stringDate = sdf.format(dateClicked);
+
+
+                Intent intent = new Intent(MainActivity.this, InputActivity.class);
+                intent.putExtra("stringDate", stringDate);
+                intent.putExtra("integerDate", integerDate);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                monthYear.setText(dateFormatForMonth.format(mCalendarView.getFirstDayOfCurrentMonth()));
+            }
+        });
 
         //
         // Fab buttons
         //
-        final FloatingActionButton weightGraphFab = (FloatingActionButton) findViewById(R.id.weightGraphFab);
+        final FloatingActionButton weightGraphFab = findViewById(R.id.weightGraphFab);
         weightGraphFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton databaseFab = (FloatingActionButton) findViewById(R.id.databaseFab);
+        FloatingActionButton databaseFab = findViewById(R.id.databaseFab);
         databaseFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton inputActivityFab= (FloatingActionButton) findViewById(R.id.inputActivityFab);
+        FloatingActionButton inputActivityFab= findViewById(R.id.inputActivityFab);
         inputActivityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,43 +124,46 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startWorkoutFabIntent);
             }
         });
-        //
-        // Calendar
-        //
-        mCalendarView = findViewById(R.id.mainCalendar);
-        mCalendarView.setDate(Calendar.getInstance().getTimeInMillis(), false, true);
-        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                String stringDate = (i1 + 1) + "/" + i2 + "/" + i;
-                String dateArray[] = stringDate.split("/");
-                String zeroDateArray[] = {
-                        String.format("%02d", Integer.valueOf(dateArray[0])),
-                        String.format("%02d", Integer.valueOf(dateArray[1])),
-                        dateArray[2]
-                };
-                stringDate = zeroDateArray[0] + "/" + zeroDateArray[1] + "/" + zeroDateArray[2];
-                Log.d(TAG, "onSelectedDayChange: stringDate: " + stringDate);
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
-                Date date = null;
-                try {
-                    date = sdf.parse(stringDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                long integerDate = date.getTime();
-                Log.d(TAG, "onSelectedDayChange: integerDate: " + integerDate);
-                // --
-                Intent inputIntent = new Intent(MainActivity.this, InputActivity.class);
-                inputIntent.putExtra("stringDate", stringDate);
-                inputIntent.putExtra("integerDate", integerDate);
-                // --
-                startActivity(inputIntent);
+        final FloatingActionButton yearLeftFab = findViewById(R.id.yearLeftFab);
+        yearLeftFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(mCalendarView.getFirstDayOfCurrentMonth());
+                calendar.add(Calendar.YEAR, -1);
+                mCalendarView.setCurrentDate(calendar.getTime());
+                monthYear.setText(dateFormatForMonth.format(mCalendarView.getFirstDayOfCurrentMonth()));
             }
         });
 
-        //dbh.closeDB();
+        final FloatingActionButton monthLeftFab = findViewById(R.id.monthLeftFab);
+        monthLeftFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCalendarView.scrollLeft();
+            }
+        });
+
+        final FloatingActionButton yearRightFab = findViewById(R.id.yearRightFab);
+        yearRightFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(mCalendarView.getFirstDayOfCurrentMonth());
+                calendar.add(Calendar.YEAR, 1);
+                mCalendarView.setCurrentDate(calendar.getTime());
+                monthYear.setText(dateFormatForMonth.format(mCalendarView.getFirstDayOfCurrentMonth()));
+            }
+        });
+
+        final FloatingActionButton monthRightFab = findViewById(R.id.monthRightFab);
+        monthRightFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCalendarView.scrollRight();
+            }
+        });
     }
 
     public void populateWeightTable(){
@@ -179,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
         long[] longDates = new long[dates.length];
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
         db = DatabaseHelper.getInstance(this);
 
@@ -212,5 +269,94 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "weights: " + Arrays.toString(weights));
 
 
+    }
+
+    public void addWeightEvent(long dateInMillis){
+        Event weightEvent = new Event(Color.RED, dateInMillis);
+        mCalendarView.addEvent(weightEvent);
+        Log.d(TAG, "addWeightEvent: weightEvent added: " + weightEvent);
+    }
+
+    public void deleteWeightEvent(long dateInMillis){
+        for (Event e : mCalendarView.getEvents(dateInMillis)){
+            // Weight events are colored RED
+            if (e.getColor() == Color.RED) {
+                mCalendarView.removeEvent(e);
+                Log.d(TAG, "deleteWeightEvent: weightEvent removed: " + e);
+            }
+        }
+    }
+
+    public void addWorkoutEvent(long dateInMillis){
+        Event workoutEvent = new Event(Color.BLUE, dateInMillis);
+        mCalendarView.addEvent(workoutEvent);
+        Log.d(TAG, "addWorkoutEvent: workoutEvent added: " + workoutEvent);
+    }
+
+    public void deleteWorkoutEvent(long dateInMillis){
+        for (Event e : mCalendarView.getEvents(dateInMillis)){
+            // Workout events are colored BLUE
+            if (e.getColor() == Color.BLUE) {
+                mCalendarView.removeEvent(e);
+                Log.d(TAG, "deleteWorkoutEvent: workoutEvent removed: " + e);
+            }
+        }
+    }
+
+    public boolean workoutEventExists(long dateInMillis){
+        for (Event e : mCalendarView.getEvents(dateInMillis)){
+            // Workout events are colored BLUE
+            if (e.getColor() == Color.BLUE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private class PopulateWeightEvents extends AsyncTask<Void, Void, List<Weight>> {
+        DatabaseHelper db = DatabaseHelper.getInstance(getApplicationContext());
+
+        @Override
+        protected List<Weight> doInBackground(Void... voids) {
+            if (db.getAllWeights() != null){
+                return db.getAllWeights();
+            } else
+                return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Weight> weights) {
+            for (Weight weight : weights){
+                Event weightEvent = new Event(Color.RED, weight.getDate());
+                mCalendarView.addEvent(weightEvent);
+                Log.d(TAG, "onPostExecute: weightEvent added: " + weightEvent);
+            }
+        }
+    }
+
+    private class PopulateWorkoutEvents extends AsyncTask<Void, Void, List<Rep>> {
+        DatabaseHelper db = DatabaseHelper.getInstance(getApplicationContext());
+
+        @Override
+        protected List<Rep> doInBackground(Void... voids) {
+            if (db.getAllReps() != null)
+                return db.getAllReps();
+            else
+                return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Rep> reps) {
+            long dateInMillis = 0;
+            for (Rep rep : reps){
+                if (rep.getDate() != dateInMillis){
+                    Event workoutEvent = new Event(Color.BLUE, rep.getDate());
+                    mCalendarView.addEvent(workoutEvent);
+                    Log.d(TAG, "onPostExecute: workoutEvent added: " + workoutEvent);
+                    dateInMillis = rep.getDate();
+                }
+            }
+        }
     }
 }
