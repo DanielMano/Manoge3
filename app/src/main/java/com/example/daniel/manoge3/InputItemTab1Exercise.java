@@ -1,7 +1,6 @@
 package com.example.daniel.manoge3;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,8 +23,8 @@ import model.Exercise;
  * Created by Daniel on 4/22/2018.
  */
 
-public class InputItemTab2Exercise extends Fragment {
-    private static final String TAG = "InputItemTab2Exercise";
+public class InputItemTab1Exercise extends Fragment {
+    private static final String TAG = "InputItemTab1Exercise";
 
     AutoCompleteTextView exerciseNameAutoComplete;
     EditText barWeightLiteral;
@@ -41,7 +40,7 @@ public class InputItemTab2Exercise extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.input_item_tab2_exercise, container, false);
+        View view = inflater.inflate(R.layout.input_item_tab1_exercise, container, false);
 
         dbh = DatabaseHelper.getInstance(getActivity());
 
@@ -118,7 +117,7 @@ public class InputItemTab2Exercise extends Fragment {
         private DatabaseHelper dbh;
 
         public ItemAutoTextAdapter(DatabaseHelper dbh) {
-            super(InputItemTab2Exercise.this.getActivity(), null);
+            super(InputItemTab1Exercise.this.getActivity(), null);
             this.dbh = dbh;
         }
 

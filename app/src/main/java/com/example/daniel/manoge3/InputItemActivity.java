@@ -32,7 +32,7 @@ public class InputItemActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_input);
 
         Intent receivedIntent = getIntent();
-        int tabPosition = receivedIntent.getIntExtra("requestedTabPage", 2);
+        int tabPosition = receivedIntent.getIntExtra("requestedTabPage", 1);
 
         mViewPager.setCurrentItem(tabPosition);
         tabLayout.setupWithViewPager(mViewPager);
@@ -40,9 +40,8 @@ public class InputItemActivity extends AppCompatActivity {
 
     public void setupViewPager(ViewPager viewPager) {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new InputItemTab1Set(), "Add Set");
-        adapter.addFragment(new InputItemTab2Exercise(), "Exercise");
-        adapter.addFragment(new InputItemTab3Routine(), "Routine");
+        adapter.addFragment(new InputItemTab1Exercise(), "Create Exercise");
+        adapter.addFragment(new InputItemTab2Routine(), "Create Routine");
 
         viewPager.setAdapter(adapter);
     }

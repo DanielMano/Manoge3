@@ -4,14 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,8 +30,8 @@ import model.Rep;
  * Created by Daniel on 5/3/2018.
  */
 
-public class InputItemTab1Set extends Fragment {
-    private static final String TAG = "InputItemTab1Set";
+public class InputSetActivity extends AppCompatActivity {
+    private static final String TAG = "InputSetActivity";
 
     LinearLayout setListLL;
     Button addSetButton, removeSetButton, saveSetButton;
@@ -57,31 +55,30 @@ public class InputItemTab1Set extends Fragment {
     String name;
     float weight;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.input_item_tab1_set, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_input_set);
 
-        setListLL = view.findViewById(R.id.inputSetVerticalLayout);
-        addSetButton = view.findViewById(R.id.inputSetAddButton);
-        removeSetButton = view.findViewById(R.id.inputSetRemoveButton);
-        saveSetButton = view.findViewById(R.id.saveSetButton);
-        inputSetTitle = view.findViewById(R.id.inputSetTitle);
+        setListLL = findViewById(R.id.inputSetVerticalLayout);
+        addSetButton = findViewById(R.id.inputSetAddButton);
+        removeSetButton = findViewById(R.id.inputSetRemoveButton);
+        saveSetButton = findViewById(R.id.saveSetButton);
+        inputSetTitle = findViewById(R.id.inputSetTitle);
 
-        set1DefaultWeight = view.findViewById(R.id.set1Bar);
-        set1TotalWeight = view.findViewById(R.id.set1Weight);
-        set1PlateWeight = view.findViewById(R.id.set1Plate);
-        set2DefaultWeight = view.findViewById(R.id.set2Bar);
-        set2TotalWeight = view.findViewById(R.id.set2Weight);
-        set2PlateWeight = view.findViewById(R.id.set2Plate);
-        set3DefaultWeight = view.findViewById(R.id.set3Bar);
-        set3TotalWeight = view.findViewById(R.id.set3Weight);
-        set3PlateWeight = view.findViewById(R.id.set3Plate);
+        set1DefaultWeight = findViewById(R.id.set1Bar);
+        set1TotalWeight = findViewById(R.id.set1Weight);
+        set1PlateWeight = findViewById(R.id.set1Plate);
+        set2DefaultWeight = findViewById(R.id.set2Bar);
+        set2TotalWeight = findViewById(R.id.set2Weight);
+        set2PlateWeight = findViewById(R.id.set2Plate);
+        set3DefaultWeight = findViewById(R.id.set3Bar);
+        set3TotalWeight = findViewById(R.id.set3Weight);
+        set3PlateWeight = findViewById(R.id.set3Plate);
 
-        set1RepNum = view.findViewById(R.id.set1Rep);
-        set2RepNum = view.findViewById(R.id.set2Rep);
-        set3RepNum = view.findViewById(R.id.set3Rep);
+        set1RepNum = findViewById(R.id.set1Rep);
+        set2RepNum = findViewById(R.id.set2Rep);
+        set3RepNum = findViewById(R.id.set3Rep);
 
         barTexts.add(set1DefaultWeight);
         barTexts.add(set2DefaultWeight);
@@ -101,7 +98,7 @@ public class InputItemTab1Set extends Fragment {
         addMyListenerToEditText(set3DefaultWeight, set3PlateWeight, set3TotalWeight);
 
         // try to get bundle
-        Bundle bundle = getActivity().getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
 
         name = bundle.getString("beginWorkoutExerciseName");
         weight = bundle.getFloat("beginWorkoutExerciseDefaultWeight", 0);
@@ -125,7 +122,7 @@ public class InputItemTab1Set extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         String stringDate = sdf.format(d);
 
-        dateTextView = view.findViewById(R.id.dateTextView);
+        dateTextView = findViewById(R.id.dateTextView);
         dateTextView.setText(stringDate);
 
         addSetButton.setOnClickListener(new View.OnClickListener() {
@@ -152,14 +149,14 @@ public class InputItemTab1Set extends Fragment {
         saveSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseHelper dbh = DatabaseHelper.getInstance(getActivity());
+                DatabaseHelper dbh = DatabaseHelper.getInstance(getApplicationContext());
 
                 Log.d(TAG, "saveSetButton pressed - longdate: " + longDate);
 
                 // TODO: going to have to make this into a standalone activity not a tab to prevent access while creating an exercise or routine
                 if (name == null) {
                     toastMessage("Can't save without exercise name");
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    Intent intent = new Intent(InputSetActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
 
@@ -202,18 +199,16 @@ public class InputItemTab1Set extends Fragment {
                     if (!MainActivity.getInstance().workoutEventExists(longDate)){
                         MainActivity.getInstance().addWorkoutEvent(longDate);
                     }
-                    getActivity().finish();
+                    finish();
                     Log.d(TAG, "onClick: workout saved");
                     toastMessage("Workout Saved");
                 }
             }
         });
-
-        return view;
     }
 
     public int dpToPx(int dp){
-        float density = this.getActivity().getResources().getDisplayMetrics().density;
+        float density = this.getResources().getDisplayMetrics().density;
         return Math.round((float) dp * density);
     }
 
@@ -222,12 +217,12 @@ public class InputItemTab1Set extends Fragment {
         setCount++;
 
         // Create linear layout
-        LinearLayout newHorzLL = new LinearLayout(getActivity());
+        LinearLayout newHorzLL = new LinearLayout(this);
         newHorzLL.setId(newHorzLL.generateViewId());
         newHorzLL.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         // set literal
-        TextView tv = new TextView(getActivity());
+        TextView tv = new TextView(this);
         tv.setId(View.generateViewId());
         tv.setText("Set " + setCount + ":");
         tv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -237,7 +232,7 @@ public class InputItemTab1Set extends Fragment {
         newHorzLL.addView(tv);
 
         // bar weight field
-        EditText bar = new EditText(getActivity());
+        EditText bar = new EditText(this);
         bar.setId(View.generateViewId());
         bar.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(50),
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -250,7 +245,7 @@ public class InputItemTab1Set extends Fragment {
         barTexts.add(bar);
 
         // plate weight field
-        EditText plate = new EditText(getActivity());
+        EditText plate = new EditText(this);
         plate.setId(View.generateViewId());
         plate.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(50),
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -262,7 +257,7 @@ public class InputItemTab1Set extends Fragment {
         plateTexts.add(plate);
 
         // total weight field
-        EditText total = new EditText(getActivity());
+        EditText total = new EditText(this);
         total.setId(View.generateViewId());
         total.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(50),
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -274,7 +269,7 @@ public class InputItemTab1Set extends Fragment {
         totalTexts.add(total);
 
         // rep field
-        EditText rep = new EditText(getActivity());
+        EditText rep = new EditText(this);
         rep.setId(View.generateViewId());
         LinearLayout.LayoutParams params  = new LinearLayout.LayoutParams(dpToPx(50),
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -383,12 +378,15 @@ public class InputItemTab1Set extends Fragment {
             public void afterTextChanged(Editable editable) {
                 Log.d(TAG, "afterTextChanged: " + new String(editable.toString()));
                 float defaultWeight = Float.valueOf(bar.getHint().toString());
+                Log.d(TAG, "afterTextChanged: defaultWeight: " + defaultWeight);
                 float plateWeight = 0.0f;
 
-                try {
-                    defaultWeight = Float.valueOf(bar.getText().toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (bar.getText() != null && bar.getText().length() > 0) {
+                    try {
+                        defaultWeight = Float.valueOf(bar.getText().toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 if (plate.getText() != null && plate.getText().length() > 0) {
                     try {
@@ -421,10 +419,12 @@ public class InputItemTab1Set extends Fragment {
                 float plateWeight = 0.0f;
                 float totalWeight = 0.0f;
 
-                try {
-                    defaultWeight = Float.valueOf(bar.getText().toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (bar.getText() != null && bar.getText().length() > 0) {
+                    try {
+                        defaultWeight = Float.valueOf(bar.getText().toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 try {
                     totalWeight = Float.valueOf(total.getText().toString());
@@ -440,6 +440,6 @@ public class InputItemTab1Set extends Fragment {
     }
 
     private void toastMessage(String message){
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

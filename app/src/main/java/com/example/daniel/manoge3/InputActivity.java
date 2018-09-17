@@ -205,10 +205,9 @@ public class InputActivity extends AppCompatActivity {
         Log.d(TAG, "editSets: list: " + repsToEdit.toString());
 
 
-        Intent intent = new Intent(InputActivity.this, InputItemActivity.class);
+        Intent intent = new Intent(InputActivity.this, InputSetActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("repsToEditList", repsToEdit);
-        bundle.putInt("requestedTabPage", 0);
         bundle.putString("exerciseName", exerciseNames.get(position));
         bundle.putBoolean("fromEdit", true);
         intent.putExtras(bundle);

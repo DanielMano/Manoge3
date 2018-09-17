@@ -17,12 +17,12 @@ import model.Exercise;
  * Created by Daniel on 9/4/2018.
  */
 
-public class InputItemTab3RoutineCustomAdapter extends ArrayAdapter<Exercise> {
+public class InputItemTab2RoutineCustomAdapter extends ArrayAdapter<Exercise> {
     private static final String TAG = "InputItemTab3RoutineCus";
 
     private Context mContext;
 
-    public InputItemTab3RoutineCustomAdapter(@NonNull Context mContext, int resource, @NonNull List<Exercise> objects) {
+    public InputItemTab2RoutineCustomAdapter(@NonNull Context mContext, int resource, @NonNull List<Exercise> objects) {
         super(mContext, resource, objects);
         this.mContext = mContext;
     }

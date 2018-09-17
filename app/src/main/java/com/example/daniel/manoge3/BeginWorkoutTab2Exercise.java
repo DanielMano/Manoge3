@@ -69,9 +69,8 @@ public class BeginWorkoutTab2Exercise extends Fragment{
                 String exerciseName = list.get(i).getName();
                 float exerciseDefaultWeight = list.get(i).getBarWeight();
 
-                Intent intent = new Intent(getContext(), InputItemActivity.class);
+                Intent intent = new Intent(getContext(), InputSetActivity.class);
                 Bundle passBundle= new Bundle();
-                passBundle.putInt("requestedTabPage", 0);
                 passBundle.putString("beginWorkoutExerciseName", exerciseName);
                 passBundle.putFloat("beginWorkoutExerciseDefaultWeight", exerciseDefaultWeight);
                 passBundle.putLong("beginWorkoutExerciseID", exerciseID);
@@ -154,7 +153,7 @@ public class BeginWorkoutTab2Exercise extends Fragment{
         Intent intent = new Intent(getActivity(), InputItemActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("exerciseToEdit", ex);
-        bundle.putInt("requestedTabPage", 1);
+        bundle.putInt("requestedTabPage", 0);
         bundle.putBoolean("fromEditExercise", true);
         intent.putExtras(bundle);
         startActivity(intent);

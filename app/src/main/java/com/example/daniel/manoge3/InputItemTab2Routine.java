@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,20 +18,19 @@ import java.util.List;
 import helper.DatabaseHelper;
 import model.Exercise;
 import model.Routine;
-import model.RoutineExercise;
 
 /**
  * Created by Daniel on 4/20/2018.
  */
 
-public class InputItemTab3Routine extends Fragment{
+public class InputItemTab2Routine extends Fragment{
 
-    private static final String TAG = "InputItemTab3Routine";
+    private static final String TAG = "InputItemTab2Routine";
 
     List<Exercise> list;
     List<Exercise> rList = new ArrayList<>();
-    public InputItemTab3RoutineCustomAdapter adapter;
-    public InputItemTab3RoutineCustomAdapter routineAdapter;
+    public InputItemTab2RoutineCustomAdapter adapter;
+    public InputItemTab2RoutineCustomAdapter routineAdapter;
     Routine editableRoutine;
     List<Exercise> exerciseInRoutineToEdit;
 
@@ -62,7 +59,7 @@ public class InputItemTab3Routine extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.input_item_tab3_routine, container, false);
+        View view = inflater.inflate(R.layout.input_item_tab2_routine, container, false);
 
         initialView = true;
 
@@ -182,11 +179,11 @@ public class InputItemTab3Routine extends Fragment{
         //rList = new ArrayList<>();
 
         //adapter = new BeginWorkoutExerciseCustomAdapter(getActivity(), R.layout.begin_workout_exercise_listview_item, list);
-        adapter = new InputItemTab3RoutineCustomAdapter(getActivity(), R.layout.activity_input_listview_item, list);
+        adapter = new InputItemTab2RoutineCustomAdapter(getActivity(), R.layout.activity_input_listview_item, list);
         exerciseList.setAdapter(adapter);
 
         //routineAdapter = new BeginWorkoutExerciseCustomAdapter(getActivity(), R.layout.begin_workout_exercise_listview_item, rList);
-        routineAdapter = new InputItemTab3RoutineCustomAdapter(getActivity(), R.layout.activity_input_listview_item, rList);
+        routineAdapter = new InputItemTab2RoutineCustomAdapter(getActivity(), R.layout.activity_input_listview_item, rList);
         routineList.setAdapter(routineAdapter);
     }
 

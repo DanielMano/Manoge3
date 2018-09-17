@@ -67,9 +67,8 @@ public class RoutineExercisesActivity extends AppCompatActivity{
                 String exerciseName = list.get(i).getName();
                 float exerciseDefaultWeight = list.get(i).getBarWeight();
 
-                Intent intent = new Intent(RoutineExercisesActivity.this, InputItemActivity.class);
+                Intent intent = new Intent(RoutineExercisesActivity.this, InputSetActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("requestedTabPage", 0);
                 bundle.putString("beginWorkoutExerciseName", exerciseName);
                 bundle.putFloat("beginWorkoutExerciseDefaultWeight", exerciseDefaultWeight);
                 bundle.putLong("beginWorkoutExerciseID", exerciseID);

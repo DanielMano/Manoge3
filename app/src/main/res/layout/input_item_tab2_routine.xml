@@ -6,7 +6,7 @@
     tools:context="com.example.daniel.manoge3.InputItemActivity">
 
     <include
-        layout="@layout/input_item_tab3_routine_content"
+        layout="@layout/input_item_tab2_routine_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/newRoutineFab"/>

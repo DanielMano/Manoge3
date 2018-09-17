@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent inputActivityFabIntent = new Intent(MainActivity.this, InputItemActivity.class);
-                inputActivityFabIntent.putExtra("requestedTabPage", 2);
+                inputActivityFabIntent.putExtra("requestedTabPage", 1);
                 startActivity(inputActivityFabIntent);
             }
         });
@@ -330,8 +330,8 @@ public class MainActivity extends AppCompatActivity {
             for (Weight weight : weights){
                 Event weightEvent = new Event(Color.RED, weight.getDate());
                 mCalendarView.addEvent(weightEvent);
-                Log.d(TAG, "onPostExecute: weightEvent added: " + weightEvent);
             }
+            Log.d(TAG, "onPostExecute: weightEvents added");
         }
     }
 
@@ -353,10 +353,10 @@ public class MainActivity extends AppCompatActivity {
                 if (rep.getDate() != dateInMillis){
                     Event workoutEvent = new Event(Color.BLUE, rep.getDate());
                     mCalendarView.addEvent(workoutEvent);
-                    Log.d(TAG, "onPostExecute: workoutEvent added: " + workoutEvent);
                     dateInMillis = rep.getDate();
                 }
             }
+            Log.d(TAG, "onPostExecute: workoutEvents added");
         }
     }
 }
