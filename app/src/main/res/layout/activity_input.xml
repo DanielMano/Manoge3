@@ -10,7 +10,7 @@
         android:id="@+id/include"
         layout="@layout/activity_input_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="489dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/saveInputFab"
@@ -25,12 +25,11 @@
         android:id="@+id/addExerciseFab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
         android:layout_margin="16dp"
         android:clickable="true"
         android:focusable="true"
         app:backgroundTint="@color/colorPrimary"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="left|bottom"
         app:srcCompat="@drawable/ic_action_name" />
 
 </android.support.design.widget.CoordinatorLayout>

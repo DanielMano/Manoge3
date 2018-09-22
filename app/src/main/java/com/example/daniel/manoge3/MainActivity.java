@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import helper.DatabaseHelper;
+import model.Exercise;
 import model.Rep;
 import model.Weight;
 
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         instance = this;
 
         db = DatabaseHelper.getInstance(this);
-
+        
         mCalendarView = findViewById(R.id.mainCalendar);
         mCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
         mCalendarView.displayOtherMonthDays(false);
@@ -238,10 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
-        db = DatabaseHelper.getInstance(this);
-
         Date date = null;
-
 
         for (int i = 0; i < dates.length; i++){
             try {
@@ -269,6 +267,73 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "weights: " + Arrays.toString(weights));
 
 
+    }
+    public void populateExerciseTable(){
+        String[] names = {
+                "Barbell Squat",
+                "Barbell Military Press",
+                "Hamstring Curl",
+                "Wide Grip Lat Pulldown",
+                "Dip",
+                "Pull Ups",
+                "Dumbbell Standing One Arm Bicep Curl",
+                "Cable Rope Triceps Pushdown",
+                "Seated Cable Row",
+                "Barbell Incline Bench Press",
+                "Barbell Lying Triceps Extension",
+                "EZ Bar Curl",
+                "Cable Triceps Pushdown",
+                "Barbell Bent Over Row",
+                "Barbell Bench Press",
+                "Dumbbell Hammer Curls",
+                "Barbell Deadlift",
+                "Cable Straight Arm Pushdown",
+                "Dumbbell Lateral Raise",
+                "Dumbbell Incline Bench Press",
+                "Barbell Rack Pull",
+                "T Bar Lying Row",
+                "Dumbbell Bicep Curl",
+                "Cable One Arm High Curl",
+                "Dumbbell Incline Curl",
+                "Barbell Shrug"
+        };
+
+        float[] defaultWeights = {
+                45.0f,
+                45.0f,
+                0f,
+                0f,
+                0f,
+                0f,
+                0f,
+                0f,
+                0f,
+                45.0f,
+                45.0f,
+                25.0f,
+                0f,
+                45.0f,
+                45.0f,
+                0f,
+                45.0f,
+                0f,
+                0f,
+                0f,
+                45.0f,
+                0f,
+                0f,
+                0f,
+                0f,
+                45.0f
+        };
+
+        for (int i = 0; i < names.length; i++){
+            Exercise ex = new Exercise();
+            ex.setID(i);
+            ex.setName(names[i]);
+            ex.setBarWeight(defaultWeights[i]);
+            db.createExercise(ex);
+        }
     }
 
     public void addWeightEvent(long dateInMillis){

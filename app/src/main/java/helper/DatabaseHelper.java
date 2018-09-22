@@ -101,10 +101,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        Log.d(TAG, "onCreate: creating database");
         // creating tables
         sqLiteDatabase.execSQL(CREATE_TABLE_WEIGHT);
         sqLiteDatabase.execSQL(CREATE_TABLE_EXERCISE);
-        sqLiteDatabase.execSQL(CREATE_TABLE_REP);
+        //sqLiteDatabase.execSQL(CREATE_TABLE_REP);
+        // statements in onupgrade
+        //sqLiteDatabase.execSQL(DATABASE_ALTER_EXERCISE_1);
+        sqLiteDatabase.execSQL(CREATE_REP_TABLE_WITH_FK);
+        sqLiteDatabase.execSQL(CREATE_TABLE_ROUTINE);
+        sqLiteDatabase.execSQL(CREATE_TABLE_ROUTINE_REL);
     }
 
 

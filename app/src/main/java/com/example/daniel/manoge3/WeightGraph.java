@@ -14,6 +14,7 @@ import com.jjoe64.graphview.series.PointsGraphSeries;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import helper.DatabaseHelper;
@@ -92,8 +93,16 @@ public class WeightGraph extends AppCompatActivity {
             graph.getViewport().setYAxisBoundsManual(true);
 
             // set manual x bounds to have nice steps
-            graph.getViewport().setMinX(dateList.get(0).getTime());
-            graph.getViewport().setMaxX(dateList.get(seriesSize-1).getTime());
+            if (seriesSize == 0){
+                Calendar cal = Calendar.getInstance();
+                cal.getTimeInMillis();
+                graph.getViewport().setMinX(cal.getTimeInMillis());
+                cal.add(Calendar.DATE, -1);
+                graph.getViewport().setMaxX(cal.getTimeInMillis());
+            } else {
+                graph.getViewport().setMinX(dateList.get(0).getTime());
+                graph.getViewport().setMaxX(dateList.get(seriesSize - 1).getTime());
+            }
             graph.getViewport().setXAxisBoundsManual(true);
 
             // as we use dates as labels, the human rounding to nice readable numbers
@@ -102,7 +111,7 @@ public class WeightGraph extends AppCompatActivity {
 
             graph.getGridLabelRenderer().setHorizontalLabelsAngle(135);
 
-            graph.getGridLabelRenderer().setPadding(50);
+            graph.getGridLabelRenderer().setPadding(70);
 
             graph.getViewport().setScrollable(true);
 
