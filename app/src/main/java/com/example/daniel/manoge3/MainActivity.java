@@ -3,10 +3,18 @@ package com.example.daniel.manoge3;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView monthYear;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
 
+    private DrawerLayout mDrawerLayout;
 
     DatabaseHelper db;
 
@@ -85,6 +94,57 @@ public class MainActivity extends AppCompatActivity {
                 monthYear.setText(dateFormatForMonth.format(mCalendarView.getFirstDayOfCurrentMonth()));
             }
         });
+
+        mDrawerLayout = findViewById(R.id.main_drawer);
+        NavigationView navigationView = findViewById(R.id.main_nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                String title = item.getTitle().toString();
+                Intent intent = null;
+                switch (title){
+                    // switch activities
+                    // or change activities to fragments and then switch fragments
+                    case "Weight Graph":
+                        Log.d(TAG, "onNavigationItemSelected: Weight selected");
+                        intent = new Intent(MainActivity.this, WeightGraph.class);
+                        break;
+                    case "Database":
+                        Log.d(TAG, "onNavigationItemSelected: Database selected");
+                        intent = new Intent(MainActivity.this, DatabaseActivity.class);
+                        break;
+                    case "Routine":
+                        Log.d(TAG, "onNavigationItemSelected: Routine selected");
+                        intent = new Intent(MainActivity.this, InputItemActivity.class);
+                        intent.putExtra("requestedTabPage", 1);
+                        break;
+                    case "Exercise":
+                        Log.d(TAG, "onNavigationItemSelected: Exercise selected");
+                        intent = new Intent(MainActivity.this, InputItemActivity.class);
+                        intent.putExtra("requestedTabPage", 0);
+                        break;
+                    default:
+                        break;
+                }
+                mDrawerLayout.closeDrawers();
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        // Sets navigation drawer header text to current date
+        View headerView = navigationView.getHeaderView(0);
+        TextView mainHeaderDate = headerView.findViewById(R.id.main_header_date);
+        String currentDate = new SimpleDateFormat("MMMM dd, YYYY").format(Calendar.getInstance().getTime());
+        mainHeaderDate.setText(currentDate);
+
+        // Adds custom toolbar with menu button for navigation drawer
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_navigation_menu);
 
         //
         // Fab buttons
@@ -165,6 +225,22 @@ public class MainActivity extends AppCompatActivity {
                 mCalendarView.scrollRight();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void populateWeightTable(){

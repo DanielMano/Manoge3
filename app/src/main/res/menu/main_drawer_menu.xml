@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group>
+        <item
+            android:id="@+id/nav_graph"
+            android:icon="@mipmap/ic_chart_line_white_48dp"
+            android:title="Weight Graph" />
+        <item
+            android:id="@+id/nav_database"
+            android:icon="@mipmap/ic_database_white_48dp"
+            android:title="Database" />
+    </group>
+
+    <item android:title="Create New">
+        <menu>
+            <item
+                android:id="@+id/nav_createRoutine"
+                android:icon="@drawable/edit"
+                android:title="Routine" />
+            <item
+                android:id="@+id/nav_createExercise"
+                android:icon="@drawable/edit"
+                android:title="Exercise" />
+        </menu>
+    </item>
+
+</menu>
